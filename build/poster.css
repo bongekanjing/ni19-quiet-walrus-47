@@ -1,8 +1,6 @@
-/* Newspaper front page - 19 November 2026.
-   Page is 1024 wide. build/render.sh screenshots 1024x1200 and crops the top
-   1024 rows, so the sheet is laid out to fill that crop edge to edge: the
-   grid stretches (grid-auto-rows: 1fr) to absorb every spare pixel, and the
-   bottom padding below the footer falls outside the crop. No dead band. */
+/* Newspaper front page — 19 November 2026.
+   Page 1024 wide, body content 1024px tall. build/render.sh screenshots
+   1024x1200 and crops the top 1024 rows. */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -14,201 +12,73 @@ html, body {
 
 body { width: 1024px; }
 
-.sheet {
-  width: 1024px;
-  height: 1200px;
-  display: flex;
-  flex-direction: column;
-  padding: 14px 22px 176px;
-  box-sizing: border-box;
-  background: #f7f4ec;
-  color: #14110c;
-  font-family: Georgia, 'Times New Roman', serif;
-}
+/* ---------------- spec rules ---------------- */
 
-/* ---------------- masthead ---------------- */
+.sheet {width:1024px; height:1200px; padding:18px 22px; box-sizing:border-box; background:#f7f4ec; color:#14110c; font-family: Georgia,'Times New Roman',serif;}
 
-.masthead { flex: 0 0 auto; }
+.masthead .paper {display:block; font-size:74px; font-weight:900; letter-spacing:-2px; text-align:center; line-height:.95; font-family:'Times New Roman',serif;}
 
-.masthead .paper {
-  display: block;
-  font-size: 64px;
-  font-weight: 900;
-  letter-spacing: -1.5px;
-  text-align: center;
-  line-height: .96;
-  font-family: 'Times New Roman', serif;
-}
+.masthead .edition {display:block; text-align:center; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#6b6355; margin-top:4px;}
 
-.masthead .edition {
-  display: block;
-  text-align: center;
-  font-size: 11.5px;
-  letter-spacing: 2.6px;
-  text-transform: uppercase;
-  color: #6b6355;
-  margin-top: 3px;
-}
+.rule.thin{border-top:1px solid #14110c; margin:6px 0;} .rule.thick{border-top:4px double #14110c; margin:5px 0;}
 
-.rule.thin { border-top: 1px solid #14110c; margin: 4px 0; }
-.rule.thick { border-top: 4px double #14110c; margin: 3px 0; }
+.dateline{display:flex; justify-content:space-between; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; padding:3px 0;}
 
-.dateline {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 1px 0 2px;
-}
+.strap{font-style:italic; text-transform:none; letter-spacing:0; font-weight:400; color:#5b5346;}
 
-.strap {
-  font-style: italic;
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 400;
-  color: #5b5346;
-}
+section.leads {display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; padding:10px 0 8px; border-bottom:1px solid #c9c2b4;}
 
-/* ---------------- leads ---------------- */
+.lead .kicker{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#8c1c13; margin-bottom:4px;}
+
+.lead h2{font-size:21px; line-height:1.12; margin:0 0 5px; font-weight:700;}
+
+.lead .deck{font-size:12px; line-height:1.34; margin:0; color:#332c22;}
+
+section.ticker{display:flex; gap:0; justify-content:space-between; padding:6px 0; border-bottom:1px solid #14110c; font-family:'Courier New',monospace; font-size:11px;}
+
+.tick b{text-transform:uppercase; letter-spacing:.5px;} .tick span{margin-left:6px; font-weight:700;} .tick em{margin-left:5px; font-style:normal; color:#8c1c13;}
+
+section.grid{display:grid; grid-template-columns:repeat(4,1fr); gap:0; padding-top:8px;}
+
+.cell{padding:5px 9px 6px; border-right:1px solid #ddd6c8; border-bottom:1px solid #ddd6c8;}
+
+.cell .tag{font-size:9.5px; letter-spacing:1.6px; text-transform:uppercase; font-weight:800; color:#8c1c13; margin-bottom:2px;}
+
+.cell h3{font-size:11.5px; line-height:1.22; margin:0; font-weight:600;}
+
+footer.foot{display:flex; justify-content:space-between; font-size:9.5px; color:#6b6355; padding-top:7px; border-top:1px solid #14110c; letter-spacing:.3px;}
+
+.mapband{display:flex; align-items:center; gap:10px; padding:5px 0; border-bottom:1px solid #c9c2b4;} .mapband .maplabel{font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:800; white-space:nowrap;}
+
+/* ---------------- fill rules ----------------
+   The crop is the top 1024 rows of the 1200px sheet, so the bands are sized
+   to land just inside 1024 rather than stopping short: leads take a fixed
+   minimum and the briefs grid gets rows of at least 68px. */
 
 section.leads {
-  flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
-  padding: 10px 0 9px;
-  border-bottom: 1px solid #c9c2b4;
+  align-items: start;
+  min-height: 178px;
 }
 
-.lead { padding: 0 13px; border-left: 1px solid #ddd6c8; }
-.lead:first-child { padding-left: 0; border-left: 0; }
-.lead:last-child { padding-right: 0; }
-
-.lead .kicker {
-  font-size: 10.5px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #8c1c13;
-  margin-bottom: 4px;
+.lead + .lead {
+  border-left: 1px solid #ddd6c8;
+  padding-left: 14px;
 }
-
-.lead h2 {
-  font-size: 21px;
-  line-height: 1.12;
-  margin: 0 0 5px;
-  font-weight: 700;
-}
-
-.lead .deck {
-  font-size: 12px;
-  line-height: 1.34;
-  margin: 0;
-  color: #332c22;
-}
-
-/* ---------------- ticker ---------------- */
-
-section.ticker {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: space-between;
-  padding: 7px 0 6px;
-  border-bottom: 1px solid #14110c;
-  font-family: 'Courier New', monospace;
-  font-size: 11.5px;
-  white-space: nowrap;
-}
-
-.tick b { text-transform: uppercase; letter-spacing: .5px; }
-.tick span { margin-left: 6px; font-weight: 700; }
-.tick em { margin-left: 5px; font-style: normal; color: #8c1c13; }
-
-/* ---------------- map band ---------------- */
-
-.mapband {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 110px;
-  padding: 6px 0;
-  border-bottom: 1px solid #c9c2b4;
-}
-
-.mapband .maplabel {
-  flex: 0 0 auto;
-  width: 88px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  line-height: 1.5;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #6b6355;
-}
-
-.mapband svg {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 86px;
-  display: block;
-}
-
-.mapband .land polygon {
-  fill: #d6cdb8;
-  stroke: #a89d85;
-  stroke-width: .8;
-  stroke-linejoin: round;
-}
-
-.mapband .pins circle { fill: #8c1c13; }
-
-/* ---------------- briefs grid ---------------- */
 
 section.grid {
-  flex: 1 1 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 1fr;
-  gap: 0;
+  grid-auto-rows: minmax(68px, auto);
+  align-content: start;
 }
 
 .cell {
-  padding: 6px 9px 6px;
-  border-right: 1px solid #ddd6c8;
-  border-bottom: 1px solid #ddd6c8;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .cell:nth-child(4n) { border-right: 0; }
 
-.cell .tag {
-  font-size: 9.5px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #8c1c13;
-  margin-bottom: 2px;
-}
-
-.cell h3 {
-  font-size: 12.1px;
-  line-height: 1.24;
-  margin: 0;
-  font-weight: 600;
-}
-
-/* ---------------- footer ---------------- */
-
 footer.foot {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: space-between;
-  font-size: 9.5px;
-  color: #6b6355;
-  padding: 6px 0 0;
-  border-top: 1px solid #14110c;
-  letter-spacing: .3px;
+  margin-top: 12px;
+  padding-bottom: 8px;
 }
