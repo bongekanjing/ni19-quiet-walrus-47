@@ -4,11 +4,9 @@
 <meta charset="utf-8">
 <title>THE WORLD TODAY — 19 November 2026</title>
 <style>
-/* Newspaper front page - 19 November 2026.
-   Page is 1024 wide. build/render.sh screenshots 1024x1200 and crops the top
-   1024 rows, so the sheet is laid out to fill that crop edge to edge: the
-   grid stretches (grid-auto-rows: 1fr) to absorb every spare pixel, and the
-   bottom padding below the footer falls outside the crop. No dead band. */
+/* Newspaper front page — 19 November 2026.
+   Page 1024 wide, body content 1024px tall. build/render.sh screenshots
+   1024x1200 and crops the top 1024 rows. */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -20,203 +18,74 @@ html, body {
 
 body { width: 1024px; }
 
-.sheet {
-  width: 1024px;
-  height: 1200px;
-  display: flex;
-  flex-direction: column;
-  padding: 14px 22px 176px;
-  box-sizing: border-box;
-  background: #f7f4ec;
-  color: #14110c;
-  font-family: Georgia, 'Times New Roman', serif;
-}
+/* ---------------- spec rules ---------------- */
 
-/* ---------------- masthead ---------------- */
+.sheet {width:1024px; height:1200px; padding:18px 22px; box-sizing:border-box; background:#f7f4ec; color:#14110c; font-family: Georgia,'Times New Roman',serif;}
 
-.masthead { flex: 0 0 auto; }
+.masthead .paper {display:block; font-size:74px; font-weight:900; letter-spacing:-2px; text-align:center; line-height:.95; font-family:'Times New Roman',serif;}
 
-.masthead .paper {
-  display: block;
-  font-size: 64px;
-  font-weight: 900;
-  letter-spacing: -1.5px;
-  text-align: center;
-  line-height: .96;
-  font-family: 'Times New Roman', serif;
-}
+.masthead .edition {display:block; text-align:center; font-size:12px; letter-spacing:3px; text-transform:uppercase; color:#6b6355; margin-top:4px;}
 
-.masthead .edition {
-  display: block;
-  text-align: center;
-  font-size: 11.5px;
-  letter-spacing: 2.6px;
-  text-transform: uppercase;
-  color: #6b6355;
-  margin-top: 3px;
-}
+.rule.thin{border-top:1px solid #14110c; margin:6px 0;} .rule.thick{border-top:4px double #14110c; margin:5px 0;}
 
-.rule.thin { border-top: 1px solid #14110c; margin: 4px 0; }
-.rule.thick { border-top: 4px double #14110c; margin: 3px 0; }
+.dateline{display:flex; justify-content:space-between; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; font-weight:700; padding:3px 0;}
 
-.dateline {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  letter-spacing: 1.4px;
-  text-transform: uppercase;
-  font-weight: 700;
-  padding: 1px 0 2px;
-}
+.strap{font-style:italic; text-transform:none; letter-spacing:0; font-weight:400; color:#5b5346;}
 
-.strap {
-  font-style: italic;
-  text-transform: none;
-  letter-spacing: 0;
-  font-weight: 400;
-  color: #5b5346;
-}
+section.leads {display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; padding:10px 0 8px; border-bottom:1px solid #c9c2b4;}
 
-/* ---------------- leads ---------------- */
+.lead .kicker{font-size:10.5px; letter-spacing:2px; text-transform:uppercase; font-weight:800; color:#8c1c13; margin-bottom:4px;}
+
+.lead h2{font-size:21px; line-height:1.12; margin:0 0 5px; font-weight:700;}
+
+.lead .deck{font-size:12px; line-height:1.34; margin:0; color:#332c22;}
+
+section.ticker{display:flex; gap:0; justify-content:space-between; padding:6px 0; border-bottom:1px solid #14110c; font-family:'Courier New',monospace; font-size:11px;}
+
+.tick b{text-transform:uppercase; letter-spacing:.5px;} .tick span{margin-left:6px; font-weight:700;} .tick em{margin-left:5px; font-style:normal; color:#8c1c13;}
+
+section.grid{display:grid; grid-template-columns:repeat(4,1fr); gap:0; padding-top:8px;}
+
+.cell{padding:5px 9px 6px; border-right:1px solid #ddd6c8; border-bottom:1px solid #ddd6c8;}
+
+.cell .tag{font-size:9.5px; letter-spacing:1.6px; text-transform:uppercase; font-weight:800; color:#8c1c13; margin-bottom:2px;}
+
+.cell h3{font-size:11.5px; line-height:1.22; margin:0; font-weight:600;}
+
+footer.foot{display:flex; justify-content:space-between; font-size:9.5px; color:#6b6355; padding-top:7px; border-top:1px solid #14110c; letter-spacing:.3px;}
+
+.mapband{display:flex; align-items:center; gap:10px; padding:5px 0; border-bottom:1px solid #c9c2b4;} .mapband .maplabel{font-size:10px; letter-spacing:2px; text-transform:uppercase; font-weight:800; white-space:nowrap;}
+
+/* ---------------- fill rules ----------------
+   The crop is the top 1024 rows of the 1200px sheet, so the bands are sized
+   to land just inside 1024 rather than stopping short: leads take a fixed
+   minimum and the briefs grid gets rows of at least 68px. */
 
 section.leads {
-  flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0;
-  padding: 10px 0 9px;
-  border-bottom: 1px solid #c9c2b4;
+  align-items: start;
+  min-height: 178px;
 }
 
-.lead { padding: 0 13px; border-left: 1px solid #ddd6c8; }
-.lead:first-child { padding-left: 0; border-left: 0; }
-.lead:last-child { padding-right: 0; }
-
-.lead .kicker {
-  font-size: 10.5px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #8c1c13;
-  margin-bottom: 4px;
+.lead + .lead {
+  border-left: 1px solid #ddd6c8;
+  padding-left: 14px;
 }
-
-.lead h2 {
-  font-size: 21px;
-  line-height: 1.12;
-  margin: 0 0 5px;
-  font-weight: 700;
-}
-
-.lead .deck {
-  font-size: 12px;
-  line-height: 1.34;
-  margin: 0;
-  color: #332c22;
-}
-
-/* ---------------- ticker ---------------- */
-
-section.ticker {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: space-between;
-  padding: 7px 0 6px;
-  border-bottom: 1px solid #14110c;
-  font-family: 'Courier New', monospace;
-  font-size: 11.5px;
-  white-space: nowrap;
-}
-
-.tick b { text-transform: uppercase; letter-spacing: .5px; }
-.tick span { margin-left: 6px; font-weight: 700; }
-.tick em { margin-left: 5px; font-style: normal; color: #8c1c13; }
-
-/* ---------------- map band ---------------- */
-
-.mapband {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 110px;
-  padding: 6px 0;
-  border-bottom: 1px solid #c9c2b4;
-}
-
-.mapband .maplabel {
-  flex: 0 0 auto;
-  width: 88px;
-  font-size: 10px;
-  letter-spacing: 2px;
-  line-height: 1.5;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #6b6355;
-}
-
-.mapband svg {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 86px;
-  display: block;
-}
-
-.mapband .land polygon {
-  fill: #d6cdb8;
-  stroke: #a89d85;
-  stroke-width: .8;
-  stroke-linejoin: round;
-}
-
-.mapband .pins circle { fill: #8c1c13; }
-
-/* ---------------- briefs grid ---------------- */
 
 section.grid {
-  flex: 1 1 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: 1fr;
-  gap: 0;
+  grid-auto-rows: minmax(68px, auto);
+  align-content: start;
 }
 
 .cell {
-  padding: 6px 9px 6px;
-  border-right: 1px solid #ddd6c8;
-  border-bottom: 1px solid #ddd6c8;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .cell:nth-child(4n) { border-right: 0; }
 
-.cell .tag {
-  font-size: 9.5px;
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: #8c1c13;
-  margin-bottom: 2px;
-}
-
-.cell h3 {
-  font-size: 12.1px;
-  line-height: 1.24;
-  margin: 0;
-  font-weight: 600;
-}
-
-/* ---------------- footer ---------------- */
-
 footer.foot {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: space-between;
-  font-size: 9.5px;
-  color: #6b6355;
-  padding: 6px 0 0;
-  border-top: 1px solid #14110c;
-  letter-spacing: .3px;
+  margin-top: 12px;
 }
 </style>
 </head>
@@ -225,83 +94,74 @@ footer.foot {
   <header class="masthead">
     <div class="rule thin"></div>
     <span class="paper">THE WORLD TODAY</span>
-    <span class="edition">39 stories from every region · 8 market quotes</span>
+    <span class="edition">47 stories from every region · front page</span>
     <div class="rule thick"></div>
     <div class="dateline"><span class="date">THURSDAY, 19 NOVEMBER 2026</span><span class="strap">Summits, strikes and storms</span></div>
   </header>
   <section class="leads">
-    <article class="lead">
-      <div class="kicker">APEC · SHENZHEN</div>
-      <h2>Trump, Xi and Putin meet three-way for the first time</h2>
-      <p class="deck">The US, Chinese and Russian presidents sit down in Shenzhen on Thursday after Trump&#x27;s separate talks with Xi. Iran, Ukraine, strategic stability and AI lead an agenda with low expectations of a deal.</p>
-    </article>
-    <article class="lead">
-      <div class="kicker">GULF · KUWAIT</div>
-      <h2>Iran hits a US base in Kuwait; Centcom says no Americans hurt</h2>
-      <p class="deck">Tehran said its drones struck Patriot batteries and launch platforms at Ali Al-Salem air base, retaliation for a US strike on Qeshm Island. Kuwait said its air defences engaged hostile drones, and US Central Command said no American personnel were wounded.</p>
-    </article>
-    <article class="lead">
-      <div class="kicker">UKRAINE</div>
-      <h2>Kyiv says one Trump-Putin-Xi meeting could end the war</h2>
-      <p class="deck">Zelenskyy said the three leaders have the means to stop it, and his foreign minister urged Beijing and Washington to press Moscow. The Crimean Bridge was hit again, and the EU proposed a 45 billion euro ($49.4bn) loan for 2027.</p>
-    </article>
+      <article class="lead">
+        <div class="kicker">APEC · SHENZHEN</div>
+        <h2>Trump, Xi and Putin meet three-way for the first time</h2>
+        <p class="deck">The US, Chinese and Russian presidents sit down in Shenzhen on Thursday after Trump&#x27;s separate talks with Xi. Iran, Ukraine and AI lead an agenda with low expectations of a deal.</p>
+      </article>
+      <article class="lead">
+        <div class="kicker">GULF · IRAN</div>
+        <h2>Iran hits a US base in Kuwait; Centcom says no Americans hurt</h2>
+        <p class="deck">Iran said its drones struck Patriot batteries and launch platforms at Ali Al-Salem air base, retaliation for a US strike on Qeshm Island. Iran&#x27;s army chief vowed a harsher response to any new attack.</p>
+      </article>
+      <article class="lead">
+        <div class="kicker">UKRAINE</div>
+        <h2>Kyiv says one Trump-Putin-Xi meeting could end the war</h2>
+        <p class="deck">Zelenskyy said the three leaders have the means to stop it. The Crimean Bridge was hit again, and the EU proposed a 45 billion euro ($49.4bn) loan for 2027.</p>
+      </article>
   </section>
   <section class="ticker">
-    <div class="tick"><b>S&amp;P 500</b><span>7,340</span><em>−1.0%</em></div>
-    <div class="tick"><b>Nasdaq</b><span>24,328</span><em>−0.7%</em></div>
-    <div class="tick"><b>Dow</b><span>50,759</span><em>−1.6%</em></div>
-    <div class="tick"><b>Brent</b><span>$92.50</span><em>−0.7%</em></div>
-    <div class="tick"><b>Gold</b><span>$3,787</span><em>−2.0%</em></div>
-    <div class="tick"><b>Bitcoin</b><span>$64,300</span><em>−0.8%</em></div>
-    <div class="tick"><b>WTI</b><span>$88.40</span><em>−0.6%</em></div>
-    <div class="tick"><b>10-yr UST</b><span>5.02%</span><em>+0.03</em></div>
-  </section>
-<section class="mapband">
-    <div class="maplabel">WHERE THE DAY HAPPENED</div>
-    <svg viewBox="0 0 980 90" preserveAspectRatio="none" role="img" aria-label="Stylised world map marking the day’s datelines">
-      <g class="land"><polygon points="32.7,8.6 59.9,4.6 136.1,5.3 217.8,4.0 272.2,5.3 315.8,11.9 337.6,19.9 299.4,22.5 283.1,27.8 269.5,35.1 225.9,34.4 204.2,38.4 176.9,31.8 152.4,25.1 141.6,18.5 108.9,13.2 54.4,13.2"/><polygon points="272.2,45.7 321.2,44.3 353.9,51.6 394.7,55.6 383.8,62.2 359.3,68.2 332.1,74.1 310.3,81.4 294.0,86.0 285.8,81.4 299.4,71.5 299.4,63.5 277.7,54.3"/><polygon points="465.5,27.1 465.5,22.5 484.6,19.2 500.9,17.2 514.5,15.2 522.7,13.2 544.4,11.9 558.1,8.6 571.7,5.3 598.9,6.6 598.9,13.2 598.9,18.5 585.3,21.8 566.2,24.5 544.4,25.1 525.4,21.8 498.2,23.2 484.6,26.5"/><polygon points="443.7,41.7 473.7,48.3 514.5,49.0 514.5,52.9 525.4,56.9 525.4,63.5 539.0,70.1 544.4,74.1 566.2,73.5 579.8,68.8 598.9,62.2 601.6,54.3 628.8,43.7 607.1,43.7 585.3,37.1 577.1,31.1 558.1,30.4 517.2,27.1 490.0,27.8 462.8,31.8"/><polygon points="585.3,21.8 612.5,19.9 639.7,17.2 653.3,15.2 680.6,13.2 707.8,11.9 735.0,10.6 775.8,10.6 816.7,13.2 857.5,15.2 884.7,18.5 871.1,22.5 843.9,25.1 822.1,30.4 816.7,35.1 789.4,38.4 775.8,45.0 762.2,48.3 754.1,40.4 740.4,37.1 729.6,37.1 707.8,41.7 686.0,46.3 675.1,37.1 653.3,35.1 631.6,33.1 612.5,26.5 593.4,25.1"/><polygon points="675.1,35.7 686.0,38.4 699.6,46.3 707.8,45.0 729.6,37.1 740.4,35.1 721.4,33.8 702.3,31.8 680.6,33.1"/><polygon points="800.3,66.2 822.1,63.5 843.9,59.6 865.7,59.6 882.0,60.9 890.2,64.2 906.5,68.2 898.3,76.1 873.8,76.8 843.9,72.8 811.2,74.1"/></g>
-      <g class="pins"><circle cx="280.4" cy="25.9" r="2.9"/><circle cx="359.6" cy="62.1" r="2.9"/><circle cx="502.0" cy="18.0" r="2.9"/><circle cx="489.7" cy="17.5" r="2.9"/><circle cx="573.0" cy="18.3" r="2.9"/><circle cx="592.4" cy="14.7" r="2.9"/><circle cx="629.9" cy="28.0" r="2.9"/><circle cx="620.7" cy="32.2" r="2.9"/><circle cx="590.2" cy="52.5" r="2.9"/><circle cx="700.2" cy="32.7" r="2.9"/><circle cx="763.6" cy="42.5" r="2.9"/><circle cx="806.9" cy="25.2" r="2.9"/><circle cx="870.3" cy="28.0" r="2.9"/><circle cx="901.6" cy="74.1" r="2.9"/></g>
-    </svg>
+      <div class="tick"><b>S&amp;P 500</b><span>7,341</span><em>−1.0%</em></div>
+      <div class="tick"><b>Nasdaq</b><span>24,328</span><em>−0.7%</em></div>
+      <div class="tick"><b>Dow</b><span>50,759</span><em>−1.6%</em></div>
+      <div class="tick"><b>Brent</b><span>$92.52</span><em>−0.7%</em></div>
+      <div class="tick"><b>Gold</b><span>$3,787</span><em>−2.0%</em></div>
+      <div class="tick"><b>Bitcoin</b><span>$64,300</span><em>−0.8%</em></div>
   </section>
   <section class="grid">
-    <div class="cell"><div class="tag">US</div><h3>Peltola unseats Sullivan in Alaska, sealing a 56-44 Senate majority</h3></div>
-    <div class="cell"><div class="tag">US</div><h3>Fed minutes: almost all saw further rate rises as likely</h3></div>
-    <div class="cell"><div class="tag">US</div><h3>Fed puts AI at the centre of the inflation debate</h3></div>
-    <div class="cell"><div class="tag">US</div><h3>Waymo pulls robotaxis off US freeways after California ban</h3></div>
-    <div class="cell"><div class="tag">LATAM</div><h3>US and Venezuela agree to restore military training and intelligence ties</h3></div>
-    <div class="cell"><div class="tag">LATAM</div><h3>Milei and Lula take their feud onto the world stage</h3></div>
-    <div class="cell"><div class="tag">US</div><h3>Trump asks the Supreme Court to let Venezuelan deportations resume</h3></div>
-    <div class="cell"><div class="tag">EUROPE</div><h3>Britain and the EU signal a reset deal on food and youth mobility</h3></div>
-    <div class="cell"><div class="tag">EUROPE</div><h3>Von der Leyen presses member states to back the Ukraine package at a Brussels summit</h3></div>
-    <div class="cell"><div class="tag">EUROPE</div><h3>Magnitude 5.7 quake shakes Romania&#x27;s Vrancea region</h3></div>
-    <div class="cell"><div class="tag">EUROPE</div><h3>Berlin and London reject US criticism of Kyiv deep strikes</h3></div>
-    <div class="cell"><div class="tag">UK</div><h3>Cambridge names “Human” its word of the year, citing AI anxiety</h3></div>
-    <div class="cell"><div class="tag">RUSSIA</div><h3>Moscow reports a record 1,336 drones downed in a single night</h3></div>
-    <div class="cell"><div class="tag">MIDEAST</div><h3>Three tankers burn after striking mines in the Strait of Hormuz</h3></div>
-    <div class="cell"><div class="tag">MIDEAST</div><h3>Houthis blame Saudi strikes for three deaths in Yemen</h3></div>
-    <div class="cell"><div class="tag">AFRICA</div><h3>South Africa reprimands Nigeria&#x27;s new high commissioner</h3></div>
-    <div class="cell"><div class="tag">AFRICA</div><h3>Senegal&#x27;s President Faye expelled from the ruling party</h3></div>
-    <div class="cell"><div class="tag">HEALTH</div><h3>DR Congo&#x27;s Ebola outbreak passes six months and 11,000 cases</h3></div>
-    <div class="cell"><div class="tag">HEALTH</div><h3>WHO puts deaths in the Congo outbreak above 5,300</h3></div>
-    <div class="cell"><div class="tag">SOUTH ASIA</div><h3>Cyclone Akvan tracks toward Andhra Pradesh, landfall due Friday</h3></div>
-    <div class="cell"><div class="tag">SOUTH ASIA</div><h3>Akvan to bring 120-130 km/h winds, gusting to 145</h3></div>
-    <div class="cell"><div class="tag">EAST ASIA</div><h3>Beijing gives Japan&#x27;s Takaichi a deliberately muted reception</h3></div>
-    <div class="cell"><div class="tag">EAST ASIA</div><h3>South Korea offers $75,000 for each case of exam cheating</h3></div>
-    <div class="cell"><div class="tag">SE ASIA</div><h3>Arsenic traced to rare-earth mining across the Myanmar border</h3></div>
-    <div class="cell"><div class="tag">SE ASIA</div><h3>Thailand rushes water to 20,000 homes as arsenic taints supplies</h3></div>
-    <div class="cell"><div class="tag">SE ASIA</div><h3>Indonesia and China sign four deals worth nearly S$100bn</h3></div>
-    <div class="cell"><div class="tag">TECH</div><h3>Nvidia revenue doubles to $115.8bn in first results without Huang</h3></div>
-    <div class="cell"><div class="tag">TECH</div><h3>Anthropic prices its initial public offering</h3></div>
-    <div class="cell"><div class="tag">PACIFIC</div><h3>Albanese and Carney stand with Putin for the APEC group photo</h3></div>
-    <div class="cell"><div class="tag">PACIFIC</div><h3>Fiji declares a national disaster as El Nino drought bites</h3></div>
-    <div class="cell"><div class="tag">CLIMATE</div><h3>COP31 draft calls for an immediate shift away from fossil fuels</h3></div>
-    <div class="cell"><div class="tag">CLIMATE</div><h3>Ministers deadlocked in Antalya over who pays</h3></div>
-    <div class="cell"><div class="tag">SPORT</div><h3>India bowl first in Wellington; New Zealand 60-4 at lunch</h3></div>
-    <div class="cell"><div class="tag">MARKETS</div><h3>S&amp;P 500 falls 1.0% to 7,340 as the dollar firms</h3></div>
-    <div class="cell"><div class="tag">MARKETS</div><h3>Gold drops 2% to about $3,787, a one-year low</h3></div>
-    <div class="cell"><div class="tag">MARKETS</div><h3>Brent holds near $92.50; 10-year Treasury above 5%</h3></div>
+      <div class="cell"><div class="tag">US</div><h3>Peltola unseats Sullivan in Alaska, sealing a 56-44 Senate majority</h3></div>
+      <div class="cell"><div class="tag">US</div><h3>Fed minutes: almost all saw further rate rises as likely</h3></div>
+      <div class="cell"><div class="tag">MARKETS</div><h3>S&amp;P 500 falls 1.0% to 7,340 as the dollar firms</h3></div>
+      <div class="cell"><div class="tag">MARKETS</div><h3>Gold drops 2% to about $3,787, a one-year low</h3></div>
+      <div class="cell"><div class="tag">MARKETS</div><h3>Brent holds near $92.50; 10-year Treasury above 5%</h3></div>
+      <div class="cell"><div class="tag">TECH</div><h3>Nvidia revenue doubles to $115.8bn in first results without Huang</h3></div>
+      <div class="cell"><div class="tag">TECH</div><h3>Anthropic prices its initial public offering</h3></div>
+      <div class="cell"><div class="tag">TECH</div><h3>Waymo pulls robotaxis off US freeways after California ban</h3></div>
+      <div class="cell"><div class="tag">HEALTH</div><h3>DR Congo&#x27;s Ebola outbreak passes six months and 11,000 cases</h3></div>
+      <div class="cell"><div class="tag">HEALTH</div><h3>WHO puts deaths in the Congo outbreak above 5,300</h3></div>
+      <div class="cell"><div class="tag">CLIMATE</div><h3>COP31 draft calls for an immediate shift away from fossil fuels</h3></div>
+      <div class="cell"><div class="tag">CLIMATE</div><h3>Ministers deadlocked in Antalya over who pays</h3></div>
+      <div class="cell"><div class="tag">EUROPE</div><h3>Britain and the EU near a reset deal on food and youth mobility</h3></div>
+      <div class="cell"><div class="tag">EUROPE</div><h3>Commission proposes a 45bn euro loan to keep Kyiv&#x27;s budget afloat</h3></div>
+      <div class="cell"><div class="tag">UK</div><h3>Cambridge names “Human” its word of the year, citing AI anxiety</h3></div>
+      <div class="cell"><div class="tag">RUSSIA</div><h3>Moscow reports a record 1,336 drones downed in a single night</h3></div>
+      <div class="cell"><div class="tag">MIDEAST</div><h3>Three tankers burn after striking mines in the Strait of Hormuz</h3></div>
+      <div class="cell"><div class="tag">MIDEAST</div><h3>Houthis blame Saudi strikes for three deaths in Yemen</h3></div>
+      <div class="cell"><div class="tag">AFRICA</div><h3>South Africa reprimands Nigeria&#x27;s new high commissioner</h3></div>
+      <div class="cell"><div class="tag">SOUTH ASIA</div><h3>Thailand rushes water to 20,000 homes as arsenic taints supplies</h3></div>
+      <div class="cell"><div class="tag">SOUTH ASIA</div><h3>Arsenic traced to rare-earth mining across the Myanmar border</h3></div>
+      <div class="cell"><div class="tag">EAST ASIA</div><h3>Beijing gives Japan&#x27;s Takaichi a deliberately muted reception</h3></div>
+      <div class="cell"><div class="tag">EAST ASIA</div><h3>South Korea offers $75,000 for each case of exam cheating</h3></div>
+      <div class="cell"><div class="tag">SE ASIA</div><h3>Indonesia and China sign four deals worth nearly S$100bn</h3></div>
+      <div class="cell"><div class="tag">LATAM</div><h3>US and Venezuela agree to restore military training and intelligence ties</h3></div>
+      <div class="cell"><div class="tag">LATAM</div><h3>Milei and Lula take their feud onto the world stage</h3></div>
+      <div class="cell"><div class="tag">AMERICAS</div><h3>Trump asks the Supreme Court to let Venezuelan deportations resume</h3></div>
+      <div class="cell"><div class="tag">US</div><h3>Florida pastor convicted over Haiti&#x27;s president&#x27;s assassination</h3></div>
+      <div class="cell"><div class="tag">SPORT</div><h3>India bowl first in Wellington; New Zealand 60-4 at lunch</h3></div>
+      <div class="cell"><div class="tag">SPORT</div><h3>Bumrah strikes twice as Latham falls for a duck</h3></div>
+      <div class="cell"><div class="tag">SPORT</div><h3>Pochettino begins work as Manchester United manager</h3></div>
+      <div class="cell"><div class="tag">PACIFIC</div><h3>Cyclone Akvan tracks toward Andhra Pradesh, landfall due Friday</h3></div>
+      <div class="cell"><div class="tag">SE ASIA</div><h3>Magnitude 5.7 quake shakes Romania&#x27;s Vrancea region</h3></div>
+      <div class="cell"><div class="tag">DIPLOMACY</div><h3>Zelenskyy urges Beijing and Washington to press Moscow</h3></div>
+      <div class="cell"><div class="tag">ENERGY</div><h3>Equinor says a cyberattack hit its IT systems, output unaffected</h3></div>
+      <div class="cell"><div class="tag">EUROPE</div><h3>Albanese and Carney stand with Putin for the APEC group photo</h3></div>
   </section>
-  <footer class="foot"><span>Compiled from AP, Reuters, CNBC, CNA, Al Jazeera and UN News. Contested claims are attributed.</span><span>THURSDAY, 19 NOVEMBER 2026</span></footer>
+  <footer class="foot"><span>Compiled from AP, Reuters, CNBC, CNA, Al Jazeera and UN News.</span><span>Thursday, 19 November 2026</span></footer>
 </div>
 </body>
 </html>
