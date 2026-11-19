@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import hashlib
 import os
 import pathlib
 import shutil
@@ -72,11 +73,29 @@ def validate(path):
             )
         chunks.append(ctype)
         if ctype == b"IHDR":
+            if length < 10:
+                raise ValueError(
+                    "IHDR chunk is missing bit depth and colour type: it is {} "
+                    "bytes, needs 13".format(length)
+                )
             if length != 13:
                 raise ValueError(
                     "IHDR chunk has wrong length {} (expected 13)".format(length)
                 )
             width, height = struct.unpack(">II", body[:8])
+            # bit depth and colour type are the two bytes after the dimensions.
+            # A PNG without them cannot be decoded, so refuse it outright.
+            bit_depth, colour_type = body[8], body[9]
+            if bit_depth not in (1, 2, 4, 8, 16):
+                raise ValueError(
+                    "IHDR bit depth {} is not a valid PNG bit depth".format(bit_depth)
+                )
+            if colour_type not in (0, 2, 3, 4, 6):
+                raise ValueError(
+                    "IHDR colour type {} is not a valid PNG colour type".format(
+                        colour_type
+                    )
+                )
         offset = crc_end
 
     if offset != len(data):
@@ -106,7 +125,7 @@ def validate(path):
             )
         )
 
-    return width, height, size
+    return width, height, size, hashlib.sha256(data).hexdigest()
 
 
 def main(argv=None):
@@ -119,13 +138,17 @@ def main(argv=None):
     args = parser.parse_args(argv)
 
     try:
-        width, height, size = validate(SOURCE)
+        width, height, size, digest = validate(SOURCE)
     except ValueError as exc:
         print("error: {}".format(exc), file=sys.stderr)
         return 1
 
     if args.check:
-        print("ok {} bytes {}x{} (check only)".format(size, width, height))
+        print(
+            "ok {} bytes {}x{} sha256 {} (check only)".format(
+                size, width, height, digest
+            )
+        )
         return 0
 
     out_dir = pathlib.Path(os.environ.get("MAKEFUN_OUTPUT_DIR", "/output"))
@@ -133,7 +156,22 @@ def main(argv=None):
     dest = out_dir / "entry.png"
     shutil.copyfile(SOURCE, dest)
 
-    print("wrote {} - {} bytes, {}x{}".format(dest, size, width, height))
+    # A copy that silently landed half-written or over a stale file would sail
+    # through every check above, so hash the bytes that actually reached the
+    # output directory and fail loudly if they differ from what we validated.
+    written = hashlib.sha256(dest.read_bytes()).hexdigest()
+    if written != digest:
+        raise ValueError(
+            "sha256 mismatch after copy to {}: validated {}, on disk {}".format(
+                dest, digest, written
+            )
+        )
+
+    print(
+        "wrote {} - {} bytes, {}x{}, sha256 {}".format(
+            dest, size, width, height, written
+        )
+    )
     return 0
 
 
