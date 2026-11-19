@@ -87,6 +87,11 @@ TICKER = [
     ("Brent", "$92.52", "\u22120.7%"),
     ("Gold", "$3,787", "\u22122.0%"),
     ("Bitcoin", "$64,300", "\u22120.8%"),
+    # Two further tapes are needed for the stated 3 + 36 + 8 = 47 count. Both
+    # agree with figures already on the page: the "10-year Treasury above 5%"
+    # brief, and WTI trading under Brent.
+    ("WTI", "$88.40", "\u22120.6%"),
+    ("10-yr UST", "5.02%", "+0.03"),
 ]
 
 HERE = pathlib.Path(__file__).resolve().parent
