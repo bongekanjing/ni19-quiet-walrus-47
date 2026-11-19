@@ -114,6 +114,9 @@ section.ticker {
   white-space: nowrap;
 }
 
+.tick { padding: 0 9px; border-left: 1px solid #cfc7b6; }
+.tick:first-child { padding-left: 0; border-left: 0; }
+.tick:last-child { padding-right: 0; }
 .tick b { text-transform: uppercase; letter-spacing: .5px; }
 .tick span { margin-left: 6px; font-weight: 700; }
 .tick em { margin-left: 5px; font-style: normal; color: #8c1c13; }

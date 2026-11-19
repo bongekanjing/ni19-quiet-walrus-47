@@ -23,8 +23,8 @@ LEADS = [
         "head": "Trump, Xi and Putin meet three-way for the first time",
         "deck": (
             "The US, Chinese and Russian presidents sit down in Shenzhen on Thursday "
-            "after Trump's separate talks with Xi. Iran, Ukraine and AI lead an agenda "
-            "with low expectations of a deal."
+            "after Trump's separate talks with Xi. Iran, Ukraine and AI head an agenda "
+            "that is expected to yield little."
         ),
     },
     {
@@ -42,7 +42,7 @@ LEADS = [
         "deck": (
             "Zelenskyy said the three leaders have the means to stop it. The Crimean "
             "Bridge was hit again, and the EU is weighing a 45 billion euro ($49.4bn) "
-            "loan to cover 2027."
+            "loan to cover Ukraine's 2027 budget gap."
         ),
     },
 ]
